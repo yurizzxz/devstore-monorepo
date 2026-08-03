@@ -1,0 +1,42 @@
+/* Shared semantic tokens used by shadcn/ui components. Apps may override them. */
+:root {
+  --background: #05040a;
+  --foreground: oklch(0.985 0 0);
+  --card: #09060f;
+  --card-foreground: oklch(0.985 0 0);
+  --popover: #08070f;
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: #7238f7;
+  --primary-foreground: oklch(0.985 0 0);
+  --secondary: #5500ff;
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: #08070f;
+  --muted-foreground: #d1c9da;
+  --accent: #5500ff;
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: #f05d6c;
+  --border: #1c1824;
+  --input: oklch(1 0 0 / 15%);
+  --ring: #5500ff;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}

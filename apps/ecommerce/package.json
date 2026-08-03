@@ -1,0 +1,17 @@
+{
+  "name": "@repo/ecommerce",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@repo/auth": "workspace:*",
+    "@repo/core": "workspace:*",
+    "@repo/prisma": "workspace:*",
+    "@repo/ui": "workspace:*",
+    "next": "15.2.4",
+    "react": "19.0.0"
+  }
+}

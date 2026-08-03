@@ -1,0 +1,12 @@
+{
+  "name": "@repo/prisma",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "prisma": {
+    "schema": "./schema.prisma"
+  },
+  "exports": {
+    ".": "./index.ts"
+  }
+}

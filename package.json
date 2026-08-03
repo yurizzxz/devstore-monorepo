@@ -1,0 +1,11 @@
+{
+  "name": "ecommerce-platform",
+  "private": true,
+  "packageManager": "pnpm@9.15.2",
+  "scripts": {
+    "dev:ecommerce": "pnpm --filter @repo/ecommerce dev",
+    "dev:dashboard": "pnpm --filter @repo/dashboard dev",
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint"
+  }
+}

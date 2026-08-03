@@ -1,0 +1,62 @@
+@import "tailwindcss";
+@import "@repo/ui/globals.css";
+
+@source "../../../../packages/ui/src";
+
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+}
+
+
+
+@theme {
+  --color-*: initial;
+
+  --color-gold: #FFB300;
+  --color-purple: #7238F7;
+  --color-purple-bold: #5500FF;
+  --color-purple-hover: #37008A;
+
+  --color-danger: #F05D6C;
+
+  --color-gray-100: #E5DBF3;
+  --color-gray-200: #D1C9DA;
+  --color-gray-300: #9F94B0;
+  --color-gray-400: #7C6F90;
+  --color-gray-500: #302B3D;
+  --color-gray-600: #24212C;
+  --color-gray-700: #1C1824;
+  --color-gray-800: #17141C;
+  --color-gray-900: #110F17;
+  --color-gray-1000: #07060A;
+
+  --color-black: #040205;
+
+  --color-navbg: #050308;
+
+  --font-heading: var(--font-oxanium);
+  --font-sans: var(--font-montserrat);
+
+  --radius-xl: 0.625rem;
+};
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #110F17;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background:  #5500FF;
+  border-radius: 10px;
+  border: 2px solid #1C1824;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9871F3;
+}
