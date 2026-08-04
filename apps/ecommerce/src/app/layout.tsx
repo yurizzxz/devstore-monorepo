@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import "@repo/ui/globals.css";
+import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import ClientNavbar from "@/components/ClientNavbar";
 import ClientFooter from "@/components/ClientFooter";
