@@ -5,7 +5,6 @@ import { InputField, InputIcon, InputRoot } from "@/components/ui/input";
 import { Lock, User, IdCard, Mail } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
 import Image from "next/image";
 
 export default function Auth() {
@@ -23,8 +22,6 @@ export default function Auth() {
   const [isRegister, setIsRegister] = useState(false);
   const router = useRouter();
 
-  const { login } = useAuth();
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
@@ -34,42 +31,12 @@ export default function Auth() {
       return;
     }
 
-    try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          nome,
-          email,
-          password,
-          telefone,
-          cpf,
-          rua,
-          cidade,
-          estado,
-          cep,
-          type: isRegister ? "register" : "login",
-        }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.message);
-        return;
-      }
-
-      login(data.token);
-
-      if (isRegister) {
-        setMessage("Cadastro realizado com sucesso! Agora faça login.");
-        setIsRegister(false);
-      } else {
-        localStorage.setItem("token", data.token);
-        router.push("/");
-      }
-    } catch (error) {
-      setError("Erro ao conectar ao servidor.");
+    if (isRegister) {
+      setMessage("Cadastro realizado com sucesso! Agora faça login.");
+      setIsRegister(false);
+    } else {
+      localStorage.setItem("token", email);
+      router.push("/");
     }
   };
 

@@ -14,7 +14,6 @@ import {
   SidebarRoot,
 } from "../sidebar";
 import NavLinks from "./nav-links";
-import { useAuth } from "@/context/AuthContext";
 import SearchBar from "../searchbar";
 import Topbar from "./topbar";
 
@@ -23,15 +22,13 @@ const Navbar = () => {
 
   const [openMo, setOm] = useState<boolean>(false);
 
-  const { user, logout } = useAuth();
-
   const [openDropdown, setDropdownOpen] = useState<boolean>(false);
 
   return (
     <>
       <header className="fixed top-0 left-0 w-full z-20 bg-navbg border-b border-gray-800">
         <Topbar />
-        <nav className="max-w-[1440px] mx-auto px-3 pb-4 ">
+        <nav className="max-w-360 mx-auto px-3 pb-4 ">
           <div className="py-5 w-full flex justify-between items-center ">
             <Link href="/">
               <Image
@@ -53,24 +50,10 @@ const Navbar = () => {
                 className="cursor-pointer flex flex-row items-center gap-2 "
                 onClick={() => (user ? setDropdownOpen((prev) => !prev) : null)}
               >
-                {user ? (
-                  <>
-                    <User className="size-7 flex-shrink-0" />
-                    <div className="flex flex-col">
-                      <small className="text-left hidden md:block">Olá!</small>
-                      <span className="hidden md:block text-md text-purple font-semibold max-w-[100px] overflow-hidden text-ellipsis whitespace-nowrap">
-                        {user.nome}
-                      </span>
-                    </div>
-                  </>
-                ) : (
-                  <Link href="/login" className="flex items-center gap-2">
-                    <User className="size-7 flex-shrink-0" />
-                    <p className="hidden md:block text-md">
-                      Entrar/Criar Conta
-                    </p>
-                  </Link>
-                )}
+                <Link href="/login" className="flex items-center gap-2">
+                  <User className="size-7 shrink-0" />
+                  <p className="hidden md:block text-md">Entrar/Criar Conta</p>
+                </Link>
               </button>
 
               <p className="opacity-20">|</p>
@@ -87,18 +70,9 @@ const Navbar = () => {
                 openDo={openDropdown}
                 setDropdownOpen={setDropdownOpen}
               >
-                {user ? (
-                  <DropdownBody>
-                    <DropdownLink href="/profile">Perfil</DropdownLink>
-                    <DropdownLink href="/" onClick={logout}>
-                      Sair
-                    </DropdownLink>
-                  </DropdownBody>
-                ) : (
-                  <DropdownBody>
-                    <DropdownLink href="/login">Entrar</DropdownLink>
-                  </DropdownBody>
-                )}
+                <DropdownBody>
+                  <DropdownLink href="/login">Entrar</DropdownLink>
+                </DropdownBody>
               </DropdownRoot>
               {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
               <button

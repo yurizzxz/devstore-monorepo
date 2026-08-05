@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
   ],
   images: {
     domains: [
-      process.env.NEXT_PUBLIC_SUPABASE,
+      process.env.NEXT_PUBLIC_SUPABASE || "",
       "graph.facebook.com",
       "example.com",
     ],

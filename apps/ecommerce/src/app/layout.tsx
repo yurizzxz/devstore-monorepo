@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { AuthProvider } from "@/context/AuthContext";
 import ClientNavbar from "@/components/ClientNavbar";
 import ClientFooter from "@/components/ClientFooter";
 
@@ -28,13 +27,11 @@ export default function RootLayout({
 
       <body className="bg-black text-[#f5eeff]">
         <main>
-          <AuthProvider children={undefined}>
-            <ClientNavbar />
+          <ClientNavbar />
 
-            <div className="max-w-[1440] mx-auto px-3 md:py-0">{children}</div>
+          <div className="max-w-[1440] mx-auto px-3 md:py-0">{children}</div>
 
-            <ClientFooter />
-          </AuthProvider>
+          <ClientFooter />
         </main>
       </body>
     </html>

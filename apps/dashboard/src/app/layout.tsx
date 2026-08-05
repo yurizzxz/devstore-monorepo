@@ -18,10 +18,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <AuthProvider children={undefined}>
+        <AuthProvider>
           <SidebarProvider>
             <ClientSidebar />
-            <main className="bg-bgColor w-full text-[#fff]">
+            <main className="bg-bgColor w-full text-white">
               <div className="flex flex-1 flex-col pt-5 gap-4 px-0 ">
                 <div className=" min-h-screen flex-1 rounded-xl md:min-h-min">
                   {children}
