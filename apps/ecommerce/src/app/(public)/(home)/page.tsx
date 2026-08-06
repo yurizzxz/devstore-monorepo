@@ -4,8 +4,8 @@ import Banner from "@/components/ui/banner";
 
 export default function Home() {
   return (
-    <main className="min-h-dvh pt-17 pb-15">
-      <Banner />
-    </main>
+    <section className="pt-0 pb-15">
+      <Banner urlImage="/banner1.png" altImage="Banner Promoções" />
+    </section>
   );
 }

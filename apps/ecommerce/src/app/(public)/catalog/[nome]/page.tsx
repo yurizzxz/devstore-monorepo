@@ -6,13 +6,11 @@ interface Params {
 
 interface Props {
   params: Params;
-  searchParams: { id: string };
 }
 
-export default function Catalog({ params, searchParams }: Props) {
+export default function Catalog({ params }: Props) {
   const { nome } = params;
   const nomeTratado = decodeURIComponent(nome);
-  const categoryId = searchParams?.id;
 
   return (
     <main className="min-h-screen py-8 pt-60 md:pt-60 ">
@@ -21,7 +19,6 @@ export default function Catalog({ params, searchParams }: Props) {
           <h1 className="text-4xl mb-3 font-bold">{nomeTratado}</h1>
           <CardList
             className="space-x-5 flex flex-wrap justify-start w-full"
-            categoryId={categoryId}
           />
         </div>
       </div>

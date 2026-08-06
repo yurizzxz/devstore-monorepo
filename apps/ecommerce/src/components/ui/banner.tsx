@@ -1,13 +1,20 @@
 import Image from "next/image";
 
-export default function Banner() {
+export default function Banner({
+  urlImage,
+  altImage,
+}: {
+  urlImage: string;
+  altImage: string;
+}) {
   return (
     <Image
-      src="/banner1.png"
+      src={urlImage}
       width={1440}
       height={400}
-      alt="banner promocional"
-      className="mt-40 md:mt-38 w-full rounded-xl"
+      alt={altImage}
+      className="w-full"
+      loading="lazy"
     />
   );
 }

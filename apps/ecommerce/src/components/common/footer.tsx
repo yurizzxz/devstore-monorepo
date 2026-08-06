@@ -1,13 +1,13 @@
 import Link from "next/link";
 import { Facebook, Instagram, Twitter } from "lucide-react";
-import NavLinks from "../Navbar/nav-links";
+import Image from "next/image";
 
-export default function Footer() {
+export const Footer = () => {
   return (
     <footer className="bg-navbg border-t border-gray-700 text-white py-10 mt-10">
-      <div className="max-w-[1440px] mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div>
-          <h3 className="text-lg font-semibold mb-3">DevStore</h3>
+      <div className="max-w-360 mx-auto px-6 grid grid-cols-1 md:grid-cols-3 space-x-12">
+        <div className="space-y-4">
+          <Image src="/devstore.png" alt="Logo" width={120} height={100} />
           <p className="text-sm text-gray-400">
             Seu marketplace de tecnologia, trazendo os melhores produtos para
             você.
@@ -34,7 +34,6 @@ export default function Footer() {
         </nav>
         <nav className="flex flex-col space-y-2">
           <h3 className="text-lg font-semibold mb-3">Produtos</h3>
-          <NavLinks linkClass="hover:underline text-gray-400 " />
         </nav>
 
         <div>
@@ -59,4 +58,4 @@ export default function Footer() {
       </div>
     </footer>
   );
-}
+};

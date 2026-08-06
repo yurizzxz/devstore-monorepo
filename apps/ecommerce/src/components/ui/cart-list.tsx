@@ -2,9 +2,9 @@ import { Trash } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ButtonPrimary } from "./button";
-import Divisor from "./divisor";
 import { formatCurrency } from "@/utils/formatCurrency";
+import { Separator } from "@repo/ui/components/separator";
+import { Button } from "@repo/ui/components/button";
 
 export default function CartList() {
   const [cartItems, setCartItems] = useState<any[]>([]);
@@ -39,7 +39,7 @@ export default function CartList() {
           </div>
         </div>
       )}
-      <div className="flex-grow overflow-y-auto px-5">
+      <div className="flex-1 overflow-y-auto px-4">
         {cartItems.length > 0 ? (
           cartItems.map((item, index) => (
             <Link
@@ -87,15 +87,15 @@ export default function CartList() {
             </Link>
           ))
         ) : (
-          <p className="mt-5 text-gray-400">
+          <p className=" text-gray-400">
             Nenhum item adicionado no carrinho.
           </p>
         )}
       </div>
 
-      <Divisor />
+      <Separator />
 
-      <div className="flex-shrink-0 px-5 pt-1 pb-3  bg-black">
+      <div className="shrink-0 px-5 space-y-2 pt-4 pb-3  bg-black">
         <p className="font-semibold mb-2 text-xl">Resumo do pedido</p>
         <div className="mb-2 ">
           {cartItems.map((item, index) => (
@@ -108,7 +108,7 @@ export default function CartList() {
             </p>
           ))}
         </div>
-        <div className="flex text-lg justify-between mb-3">
+        <div className="flex text-md justify-between mb-3">
           <p className="">Subtotal</p>
           <p>
             {formatCurrency(
@@ -116,7 +116,7 @@ export default function CartList() {
             )}
           </p>
         </div>
-        <ButtonPrimary className="w-full">Finalizar compra</ButtonPrimary>
+        <Button className="w-full">Finalizar compra</Button>
       </div>
     </div>
   );
