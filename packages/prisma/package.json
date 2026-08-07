@@ -7,6 +7,6 @@
     "schema": "./schema.prisma"
   },
   "exports": {
-    ".": "./index.ts"
+    ".": "./*.ts"
   }
 }

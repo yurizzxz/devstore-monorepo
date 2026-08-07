@@ -36,7 +36,6 @@ Organize cada domínio em `packages/core/src/modules`:
 modules/products/
   domain/          # entidades, tipos e regras puras
   use-cases/       # ações: listar, criar, atualizar
-  repositories/    # contratos usados pelos use cases
 ```
 
 - Use case coordena regra de negócio.
