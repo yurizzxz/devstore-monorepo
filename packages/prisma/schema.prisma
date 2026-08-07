@@ -1,5 +1,5 @@
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -7,44 +7,140 @@ generator client {
   provider = "prisma-client-js"
 }
 
-model Produto {
-  id          Int      @id @default(autoincrement())
-  nome        String
-  description String
-  foto        String
-  categoriaId Int
-  specifications String
-  categoria   Categoria @relation(fields: [categoriaId], references: [id])
-  preco       Float
-  estrelas    Float
-  carrinho    CarrinhoProduto[]
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  imageUrl  String?
+
+  carts     Cart[]
+  orders    Order[]
+  shippingAddresses ShippingAddress[]
 }
 
-model Categoria {
-  id       Int       @id @default(autoincrement())
-  nome     String
-  produtos Produto[]
+model Product {
+  id              Int      @id @default(autoincrement())
+  name            String
+  description     String
+  slug            String   @unique
+  productImage    String
+  specifications  String
+
+  categoryId      Int
+  category        Category @relation(fields: [categoryId], references: [id])
+
+  priceInCents    Int
+  avaliationStars Float
+
+  createdAt       DateTime @default(now()) @db.Timestamptz(3)
+
+  cartItems       CartItem[]
+  orderItems      OrderItem[]
 }
 
-model Carrinho {
-  id          Int                @id @default(autoincrement())
-  usuarioId   Int
-  produtos    CarrinhoProduto[]
-  total       Float
-  status      StatusCarrinho
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String
+
+  products  Product[]
 }
 
-model CarrinhoProduto {
-  id         Int      @id @default(autoincrement())
-  produtoId  Int
-  produto    Produto  @relation(fields: [produtoId], references: [id])
-  carrinhoId Int
-  quantidade Int
+model Cart {
+  id            Int        @id @default(autoincrement())
 
-  Carrinho Carrinho[]
+  userId        Int
+  user          User       @relation(fields: [userId], references: [id])
+
+  items         CartItem[]
+
+  totalInCents  Int
+
+  createdAt     DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime @updatedAt @db.Timestamptz(3)
 }
 
-enum StatusCarrinho {
-  ABERTO
-  FINALIZADO
+model CartItem {
+  id          Int @id @default(autoincrement())
+
+  cartId      Int
+  cart        Cart @relation(fields: [cartId], references: [id])
+
+  productId   Int
+  product     Product @relation(fields: [productId], references: [id])
+
+  quantity    Int
+
+  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+}
+
+model ShippingAddress {
+  id              Int @id @default(autoincrement())
+
+  userId          Int
+  user            User @relation(fields: [userId], references: [id])
+
+  recipientName   String
+  street          String
+  number          String
+  complement      String?
+  city            String
+  neighborhood    String
+  zipCode         String
+  country         String
+  phone           String
+  email           String
+  cpfOrCnpj       String
+
+  createdAt       DateTime @default(now()) @db.Timestamptz(3)
+
+  orders          Order[]
+}
+
+model Order {
+  id                Int @id @default(autoincrement())
+
+  userId            Int
+  user              User @relation(fields: [userId], references: [id])
+
+  status            OrderStatus @default(PENDING_PAYMENT)
+
+  items             OrderItem[]
+
+  recipientName     String
+  street            String
+  number            String
+  complement        String?
+  city              String
+  neighborhood      String
+  zipCode           String
+  country           String
+  phone             String
+  email             String
+  cpfOrCnpj         String
+
+  totalPriceInCents Int
+
+  expiresAt         DateTime @db.Timestamptz(3)
+  createdAt         DateTime @default(now()) @db.Timestamptz(3)
+}
+
+model OrderItem {
+  id            Int @id @default(autoincrement())
+
+  orderId       Int
+  order         Order @relation(fields: [orderId], references: [id])
+
+  productId     Int
+  product       Product @relation(fields: [productId], references: [id])
+
+  quantity      Int
+  priceInCents  Int
+
+  createdAt     DateTime @default(now()) @db.Timestamptz(3)
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  SUCCESS_PAYMENT
+  CANCELLED
 }
