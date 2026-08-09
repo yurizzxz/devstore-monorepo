@@ -14,6 +14,7 @@ const nextConfig: NextConfig = {
       process.env.NEXT_PUBLIC_SUPABASE || "",
       "graph.facebook.com",
       "example.com",
+      "placehold.co"
     ],
   },
 };

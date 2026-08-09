@@ -18,24 +18,25 @@ model User {
 }
 
 model Product {
-  id               String     @id @default(cuid())
-  name             String
-  description      String
-  slug             String     @unique
-  productImage     String
-  specifications   String
-  categoryId       String
-  category         Category   @relation(fields: [categoryId], references: [id])
-  priceInCents     Int
-  avaliationStars  Float
-  createdAt        DateTime   @default(now()) @db.Timestamptz(3)
-  cartItems        CartItem[]
-  orderItems       OrderItem[]
+  id              String      @id @default(cuid())
+  name            String
+  description     String
+  slug            String      @unique
+  productImage    String
+  specifications  String
+  categoryId      String
+  category        Category    @relation(fields: [categoryId], references: [id])
+  priceInCents    Int
+  avaliationStars Float
+  createdAt       DateTime    @default(now()) @db.Timestamptz(3)
+  cartItems       CartItem[]
+  orderItems      OrderItem[]
 }
 
 model Category {
   id       String    @id @default(cuid())
   name     String
+  slug     String    @unique
   products Product[]
 }
 
@@ -98,8 +99,8 @@ model Order {
   email             String
   cpfOrCnpj         String
   totalPriceInCents Int
-  expiresAt         DateTime         @db.Timestamptz(3)
-  createdAt         DateTime         @default(now()) @db.Timestamptz(3)
+  expiresAt         DateTime        @db.Timestamptz(3)
+  createdAt         DateTime        @default(now()) @db.Timestamptz(3)
 }
 
 model OrderItem {

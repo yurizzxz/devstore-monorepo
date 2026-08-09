@@ -27,6 +27,7 @@ type HeaderProps = {
   } | null;
   categories: {
     id: string;
+    slug: string;
     name: string;
   }[];
 };
@@ -149,7 +150,7 @@ export const Header = ({ user, categories }: HeaderProps) => {
                       <ul className="space-y-2">
                         {categories.map((category) => (
                           <li key={category.id}>
-                            <Link href={`/categories/${category.id}`}>
+                            <Link href={`/products/${category.slug}`}>
                               {category.name}
                             </Link>
                           </li>
@@ -170,7 +171,7 @@ export const Header = ({ user, categories }: HeaderProps) => {
             <ul className="flex flex-row space-x-10 items-center">
               {categories.map((category) => (
                 <li key={category.id}>
-                  <Link href={`/categories/${category.id}`}>
+                  <Link href={`/products/${category.slug}`}>
                     {category.name}
                   </Link>
                 </li>

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Header } from "@/components/common/header/header";
 import { Footer } from "@/components/common/footer";
-import { prisma } from "../../../../packages/prisma/client";
+import { prisma } from "@repo/prisma/client";
 
 export const metadata: Metadata = {
   title: {

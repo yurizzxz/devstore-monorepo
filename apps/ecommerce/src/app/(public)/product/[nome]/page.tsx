@@ -1,7 +1,5 @@
 "use client";
 import CardList from "@/components/Cards";
-import Section from "@/components/ui/Section";
-import Divisor from "@/components/ui/divisor";
 import { useCart } from "@/hooks/useCart";
 import { useCounter } from "@/hooks/useCounter";
 import { ShoppingCart } from "lucide-react";
@@ -84,19 +82,15 @@ export default function Product({ params, searchParams }: Props) {
           </div>
         </div>
       </div>
-      <Divisor className="mt-20 mb-20" />
       <ProductDescription
         description={decodeURIComponent(description)}
         specifications={specifications}
       />
-      <Divisor className="mt-20 mb-20" />
-      <Section title="Talvez você goste">
         <CardList
           categoryId={category}
           useSwiper={true}
           className="flex space-x-4 flex-wrap"
         />
-      </Section>
     </main>
   );
 }
