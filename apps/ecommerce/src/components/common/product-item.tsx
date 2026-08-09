@@ -24,11 +24,11 @@ const ProductItem = ({ product, textContainerClassName }: ProductItemProps) => {
         className="h-auto w-full rounded-xl"
       />
       <div className={cn("flex max-w-[200px] flex-col gap-1", textContainerClassName)}>
-        <p className="truncate text-sm font-medium">{product.name}</p>
+        <p className="truncate text-lg font-medium">{product.name}</p>
         <p className="text-muted-foreground truncate text-xs font-medium">
           {product.description}
         </p>
-        <p className="truncate text-sm font-semibold">
+        <p className="truncate text-xl text-primary font-semibold">
           {formatCentsToBRL(product.priceInCents)}
         </p>
       </div>

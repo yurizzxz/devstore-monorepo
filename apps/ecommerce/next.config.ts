@@ -10,11 +10,12 @@ const nextConfig: NextConfig = {
     "@repo/utils",
   ],
   images: {
-    domains: [
-      process.env.NEXT_PUBLIC_SUPABASE || "",
-      "graph.facebook.com",
-      "example.com",
-      "placehold.co"
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/c4jdhuwf/image/upload/**",
+      },
     ],
   },
 };

@@ -7,6 +7,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@repo/auth": "workspace:^",
     "@repo/core": "workspace:*",
     "@repo/prisma": "workspace:*",
     "@repo/ui": "workspace:*",
