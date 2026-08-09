@@ -29,8 +29,12 @@ model Product {
   priceInCents    Int
   avaliationStars Float
   createdAt       DateTime    @default(now()) @db.Timestamptz(3)
+  isFeatured      Boolean     @default(false)
+  stockQuantity   Int         @default(0)
   cartItems       CartItem[]
   orderItems      OrderItem[]
+
+  @@index([categoryId])
 }
 
 model Category {
