@@ -8,6 +8,11 @@
   },
   "dependencies": {
     "@better-auth/prisma-adapter": "^1.6.26",
+    "@repo/prisma": "workspace:*",
     "better-auth": "^1.6.26"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.43",
+    "ts-node": "^10.9.2"
   }
 }
