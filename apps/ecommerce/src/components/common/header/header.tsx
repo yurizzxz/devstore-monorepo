@@ -1,17 +1,15 @@
-"use client";
-
 import CartList from "@/components/ui/cart-list";
 import { Menu, ShoppingCart, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState } from "react";
-import {
-  DropdownBody,
-  DropdownLink,
-  DropdownRoot,
-} from "@/components/ui/dropdown-menu";
 import SearchBar from "@/components/common/searchbar";
 import { PromotionsBar } from "./promotions-bar";
+import {
+  DropdownMenu,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+} from "@repo/ui/components/dropdown-menu";
 import {
   Sheet,
   SheetContent,
@@ -19,10 +17,21 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@repo/ui/components/sheet";
+import { Button } from "@repo/ui/components/button";
 
-export const Header = () => {
-  const [openDropdown, setDropdownOpen] = useState<boolean>(false);
+type HeaderProps = {
+  user: {
+    name: string;
+    image: string;
+    email: string;
+  } | null;
+  categories: {
+    id: string;
+    name: string;
+  }[];
+};
 
+export const Header = ({ user, categories }: HeaderProps) => {
   return (
     <>
       <header className="sticky top-0 w-full z-20 bg-background border-b border-zinc-800">
@@ -43,27 +52,39 @@ export const Header = () => {
               <SearchBar />
             </div>
 
-            <div className="relative flex items-center space-x-6 ">
-              <button
-                type="button"
-                className="cursor-pointer flex flex-row items-center gap-2 "
-                onClick={() =>
-                  openDropdown ? setDropdownOpen((prev) => !prev) : null
-                }
-              >
-                <Link href="/login" className="flex items-center gap-2">
-                  <User className="size-7 shrink-0" />
-                  <p className="hidden md:block text-md">Entrar/Criar Conta</p>
-                </Link>
-              </button>
-              <DropdownRoot
-                openDo={openDropdown}
-                setDropdownOpen={setDropdownOpen}
-              >
-                <DropdownBody>
-                  <DropdownLink href="/login">Entrar</DropdownLink>
-                </DropdownBody>
-              </DropdownRoot>
+            <div className="flex items-center space-x-5">
+              <div className="hidden md:block">
+                {user ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger>
+                      <User className="size-7" />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuItem>
+                        <Link href="/profile">Perfil</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <Link href="/orders">Pedidos</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
+                        <Link href="/logout">Sair</Link>
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <Button asChild variant="ghost" className="md:px-2 md:py-1">
+                    <Link
+                      href="/login"
+                      className="flex flex-row items-center gap-2"
+                    >
+                      <User className="size-7" />
+                      <span className="hidden md:block text-md">
+                        Entrar / Cadastrar
+                      </span>
+                    </Link>
+                  </Button>
+                )}
+              </div>
 
               <Sheet>
                 <SheetTrigger className="flex flex-row items-center gap-2 cursor-pointer">
@@ -88,6 +109,53 @@ export const Header = () => {
                     <SheetHeader>
                       <SheetTitle>Menu</SheetTitle>
                     </SheetHeader>
+                    {user ? (
+                      <DropdownMenu>
+                        <DropdownMenuTrigger>
+                          <User className="size-7" />
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <DropdownMenuItem>
+                            <Link href="/profile">Perfil</Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Link href="/orders">Pedidos</Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Link href="/logout">Sair</Link>
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    ) : (
+                      <Button
+                        asChild
+                        variant="ghost"
+                        className="md:px-2 md:py-1"
+                      >
+                        <Link
+                          href="/login"
+                          className="flex flex-row items-center gap-2"
+                        >
+                          <User className="size-7" />
+                          <span className="hidden md:block text-md">
+                            Entrar / Cadastrar
+                          </span>
+                        </Link>
+                      </Button>
+                    )}
+
+                    <nav aria-label="Categorias" className="mt-4">
+                      <p className="mb-2 text-sm font-semibold">Categorias</p>
+                      <ul className="space-y-2">
+                        {categories.map((category) => (
+                          <li key={category.id}>
+                            <Link href={`/categories/${category.id}`}>
+                              {category.name}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </nav>
                   </SheetContent>
                 </Sheet>
               </div>
@@ -100,7 +168,13 @@ export const Header = () => {
 
           <div className="hidden md:flex items-center justify-center py-2">
             <ul className="flex flex-row space-x-10 items-center">
-              {/* <NavLinks /> */}
+              {categories.map((category) => (
+                <li key={category.id}>
+                  <Link href={`/categories/${category.id}`}>
+                    {category.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </nav>

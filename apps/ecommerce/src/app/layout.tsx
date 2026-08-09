@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Header } from "@/components/common/header/header";
 import { Footer } from "@/components/common/footer";
+import { prisma } from "../../../../packages/prisma/client";
 
 export const metadata: Metadata = {
   title: {
@@ -13,16 +14,24 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const categories = await prisma.category.findMany({
+    orderBy: {
+      name: "asc",
+    },
+  });
   return (
     <html lang="pt-BR">
       <body className="text-[#f5eeff]">
         <main>
-          <Header />
+          <Header
+            user={null}
+            categories={categories}
+          />
 
           <div className="md:py-0">{children}</div>
 

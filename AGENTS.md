@@ -8,6 +8,7 @@ Projeto Next.js em manutenção de código legado. Prioridade: estabilizar compo
 
 - Next.js App Router.
 - Server Components por padrão.
+- VOCÊ NÃO DEVE RODAR SCRIPTS SEM ME CONSULTAR ANTES (APENAS CRIAÇÃO DE ARQUIVOS)
 - Server Actions ou Route Handlers (no ecommerce) para mutações.
 - Sem React Context. Use props, `useState`, URL search params, cookies e estado no servidor.
 - Prisma é a ORM escolhida.
@@ -26,6 +27,11 @@ packages/
   ui/              # shadcn e componentes React compartilhados
   lib/             # integrações externas
   utils/           # funções puras reutilizáveis
+```
+
+### Como usar o monorepo
+```
+pnpm dlx shadcn@latest add dropdown-menu -c packages/ui //shadcn
 ```
 
 ## Backend

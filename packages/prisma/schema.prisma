@@ -8,104 +8,84 @@ generator client {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  email     String   @unique
-  imageUrl  String?
-
-  carts     Cart[]
-  orders    Order[]
+  id                String            @id @default(cuid())
+  name              String
+  email             String            @unique
+  imageUrl          String?
+  carts             Cart[]
+  orders            Order[]
   shippingAddresses ShippingAddress[]
 }
 
 model Product {
-  id              Int      @id @default(autoincrement())
-  name            String
-  description     String
-  slug            String   @unique
-  productImage    String
-  specifications  String
-
-  categoryId      Int
-  category        Category @relation(fields: [categoryId], references: [id])
-
-  priceInCents    Int
-  avaliationStars Float
-
-  createdAt       DateTime @default(now()) @db.Timestamptz(3)
-
-  cartItems       CartItem[]
-  orderItems      OrderItem[]
+  id               String     @id @default(cuid())
+  name             String
+  description      String
+  slug             String     @unique
+  productImage     String
+  specifications   String
+  categoryId       String
+  category         Category   @relation(fields: [categoryId], references: [id])
+  priceInCents     Int
+  avaliationStars  Float
+  createdAt        DateTime   @default(now()) @db.Timestamptz(3)
+  cartItems        CartItem[]
+  orderItems       OrderItem[]
 }
 
 model Category {
-  id        Int       @id @default(autoincrement())
-  name      String
-
-  products  Product[]
+  id       String    @id @default(cuid())
+  name     String
+  products Product[]
 }
 
 model Cart {
-  id            Int        @id @default(autoincrement())
-
-  userId        Int
-  user          User       @relation(fields: [userId], references: [id])
-
-  items         CartItem[]
-
-  totalInCents  Int
-
-  createdAt     DateTime @default(now()) @db.Timestamptz(3)
-  updatedAt     DateTime @updatedAt @db.Timestamptz(3)
+  id           String     @id @default(cuid())
+  userId       String
+  user         User       @relation(fields: [userId], references: [id])
+  items        CartItem[]
+  totalInCents Int
+  createdAt    DateTime   @default(now()) @db.Timestamptz(3)
+  updatedAt    DateTime   @updatedAt @db.Timestamptz(3)
 }
 
 model CartItem {
-  id          Int @id @default(autoincrement())
-
-  cartId      Int
-  cart        Cart @relation(fields: [cartId], references: [id])
-
-  productId   Int
-  product     Product @relation(fields: [productId], references: [id])
-
-  quantity    Int
-
-  createdAt   DateTime @default(now()) @db.Timestamptz(3)
+  id        String   @id @default(cuid())
+  cartId    String
+  cart      Cart     @relation(fields: [cartId], references: [id])
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  quantity  Int
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
 }
 
 model ShippingAddress {
-  id              Int @id @default(autoincrement())
-
-  userId          Int
-  user            User @relation(fields: [userId], references: [id])
-
-  recipientName   String
-  street          String
-  number          String
-  complement      String?
-  city            String
-  neighborhood    String
-  zipCode         String
-  country         String
-  phone           String
-  email           String
-  cpfOrCnpj       String
-
-  createdAt       DateTime @default(now()) @db.Timestamptz(3)
-
-  orders          Order[]
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  recipientName String
+  street        String
+  number        String
+  complement    String?
+  city          String
+  neighborhood  String
+  zipCode       String
+  country       String
+  phone         String
+  email         String
+  cpfOrCnpj     String
+  createdAt     DateTime @default(now()) @db.Timestamptz(3)
+  orders        Order[]
 }
 
 model Order {
-  id                Int @id @default(autoincrement())
-
-  userId            Int
-  user              User @relation(fields: [userId], references: [id])
-
-  status            OrderStatus @default(PENDING_PAYMENT)
-
+  id                String          @id @default(cuid())
+  userId            String
+  user              User            @relation(fields: [userId], references: [id])
+  status            OrderStatus     @default(PENDING_PAYMENT)
+  shippingAddressId String
+  shippingAddress   ShippingAddress @relation(fields: [shippingAddressId], references: [id])
   items             OrderItem[]
-
   recipientName     String
   street            String
   number            String
@@ -117,26 +97,20 @@ model Order {
   phone             String
   email             String
   cpfOrCnpj         String
-
   totalPriceInCents Int
-
-  expiresAt         DateTime @db.Timestamptz(3)
-  createdAt         DateTime @default(now()) @db.Timestamptz(3)
+  expiresAt         DateTime         @db.Timestamptz(3)
+  createdAt         DateTime         @default(now()) @db.Timestamptz(3)
 }
 
 model OrderItem {
-  id            Int @id @default(autoincrement())
-
-  orderId       Int
-  order         Order @relation(fields: [orderId], references: [id])
-
-  productId     Int
-  product       Product @relation(fields: [productId], references: [id])
-
-  quantity      Int
-  priceInCents  Int
-
-  createdAt     DateTime @default(now()) @db.Timestamptz(3)
+  id           String   @id @default(cuid())
+  orderId      String
+  order        Order    @relation(fields: [orderId], references: [id])
+  productId    String
+  product      Product  @relation(fields: [productId], references: [id])
+  quantity     Int
+  priceInCents Int
+  createdAt    DateTime @default(now()) @db.Timestamptz(3)
 }
 
 enum OrderStatus {

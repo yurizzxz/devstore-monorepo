@@ -1,3 +1,5 @@
+"use client";
+
 import { Trash } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -32,7 +34,7 @@ export default function CartList() {
     <div className="flex flex-col h-[calc(100vh-100px)]">
       {message && (
         <div className="absolute bottom-4 right-4">
-          <div className="bg-gray-900 border border-gray-800 text-gray-100 p-4 rounded-lg shadow-lg  max-w-xs transition-transform transform duration-300 ease-in-out">
+          <div className="bg-zinc-900 border border-zinc-800 text-zinc-100 p-4 rounded-lg shadow-lg  max-w-xs transition-transform transform duration-300 ease-in-out">
             <div className="flex items-center gap-2 mt-2">
               <p>{message}</p>
             </div>
@@ -57,7 +59,7 @@ export default function CartList() {
                 },
               }}
             >
-              <div className="pt-3 pb-5 border-b border-gray-700 flex relative items-center space-x-4">
+              <div className="pt-3 pb-5 border-b border-zinc-800 flex relative items-center space-x-4">
                 <div>
                   <Image
                     alt={item.nome}
@@ -87,15 +89,13 @@ export default function CartList() {
             </Link>
           ))
         ) : (
-          <p className=" text-gray-400">
-            Nenhum item adicionado no carrinho.
-          </p>
+          <p className="text-zinc-400">Nenhum item adicionado no carrinho.</p>
         )}
       </div>
 
       <Separator />
 
-      <div className="shrink-0 px-5 space-y-2 pt-4 pb-3  bg-black">
+      <div className="shrink-0 px-5 space-y-2 pt-4 pb-3">
         <p className="font-semibold mb-2 text-xl">Resumo do pedido</p>
         <div className="mb-2 ">
           {cartItems.map((item, index) => (
@@ -112,7 +112,7 @@ export default function CartList() {
           <p className="">Subtotal</p>
           <p>
             {formatCurrency(
-              cartItems.reduce((total, item) => total + item.price, 0)
+              cartItems.reduce((total, item) => total + item.price, 0),
             )}
           </p>
         </div>
