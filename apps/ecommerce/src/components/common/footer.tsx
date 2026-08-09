@@ -4,11 +4,11 @@ import Image from "next/image";
 
 export const Footer = () => {
   return (
-    <footer className="bg-navbg border-t border-gray-700 text-white py-10 mt-10">
-      <div className="max-w-360 mx-auto px-6 grid grid-cols-1 md:grid-cols-3 space-x-12">
+    <footer className="bg-navbg border-t border-zinc-700 text-white py-10 mt-10">
+      <div className="max-w-360 mx-auto px-6 grid grid-cols-1 md:grid-cols-3 space-x-12 space-y-4">
         <div className="space-y-4">
           <Image src="/devstore.png" alt="Logo" width={120} height={100} />
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-zinc-400">
             Seu marketplace de tecnologia, trazendo os melhores produtos para
             você.
           </p>
@@ -16,19 +16,19 @@ export const Footer = () => {
 
         <nav className="flex flex-col space-y-2">
           <h3 className="text-lg font-semibold mb-3">Links Úteis</h3>
-          <Link href="/sobre" className="hover:underline text-gray-400">
+          <Link href="/sobre" className="hover:underline text-zinc-400">
             Sobre nós
           </Link>
-          <Link href="/contato" className="hover:underline text-gray-400">
+          <Link href="/contato" className="hover:underline text-zinc-400">
             Contato
           </Link>
           <Link
             href="/politica-de-privacidade"
-            className="hover:underline text-gray-400"
+            className="hover:underline text-zinc-400"
           >
             Política de Privacidade
           </Link>
-          <Link href="/termos-de-uso" className="hover:underline text-gray-400">
+          <Link href="/termos-de-uso" className="hover:underline text-zinc-400">
             Termos de Uso
           </Link>
         </nav>
@@ -39,20 +39,20 @@ export const Footer = () => {
         <div>
           <h3 className="text-lg font-semibold mb-3">Suporte</h3>
           <div className="flex space-x-4 mt-4">
-            <Link href="#" className="hover:text-gray-400">
+            <Link href="#" className="hover:text-zinc-400">
               <Facebook size={20} />
             </Link>
-            <Link href="#" className="hover:text-gray-400">
+            <Link href="#" className="hover:text-zinc-400">
               <Instagram size={20} />
             </Link>
-            <Link href="#" className="hover:text-gray-400">
+            <Link href="#" className="hover:text-zinc-400">
               <Twitter size={20} />
             </Link>
           </div>
         </div>
       </div>
 
-      <div className="text-center text-sm text-gray-500 mt-8">
+      <div className="text-center text-sm text-zinc-500 mt-8">
         &copy; {new Date().getFullYear()} DevStore. Todos os direitos
         reservados.
       </div>
