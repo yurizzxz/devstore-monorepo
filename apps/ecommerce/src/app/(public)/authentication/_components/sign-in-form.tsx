@@ -47,6 +47,7 @@ export function SignInForm() {
       password: values.password,
       fetchOptions: {
         onSuccess: () => {
+          toast.success("Logado com sucesso");
           router.push("/");
           router.refresh();
         },
@@ -106,7 +107,7 @@ export function SignInForm() {
               />
             </CardContent>
             <CardFooter>
-              <Button disabled={!form.formState.isSubmitting} type="submit">
+              <Button disabled={form.formState.isSubmitting} type="submit">
                 {form.formState.isSubmitting ? "Entrando..." : "Entrar"}
               </Button>
             </CardFooter>

@@ -79,8 +79,8 @@ export const Header = ({ user, categories }: HeaderProps) => {
                       <DropdownMenuItem>
                         <Button
                           onClick={handleSignOut}
-                          variant="ghost"
-                          className="w-full px-0 py-0 text-left"
+                          variant="destructive"
+                          className="w-full"
                         >
                           Sair
                         </Button>
@@ -108,11 +108,28 @@ export const Header = ({ user, categories }: HeaderProps) => {
                   <span className="hidden md:block text-md">Carrinho</span>
                 </SheetTrigger>
                 <SheetContent>
-                  <SheetHeader>
-                    <SheetTitle>Carrinho</SheetTitle>
-                  </SheetHeader>
-
+                 {user ? (
                   <CartList />
+                 ) : (
+                  <div className="flex flex-col items-center justify-center h-full">
+                    <span className="text-md">Voce precisa estar logado</span>
+                    <Button
+                      asChild
+                      variant="ghost"
+                      className="md:px-2 md:py-1 mt-3"
+                    >
+                      <Link
+                        href="/authentication"
+                        className="flex flex-row items-center gap-2"
+                      >
+                        <User className="size-7" />
+                        <span className="hidden md:block text-md">
+                          Entrar / Cadastrar
+                        </span>
+                      </Link>
+                    </Button>
+                  </div>
+                 )}
                 </SheetContent>
               </Sheet>
 

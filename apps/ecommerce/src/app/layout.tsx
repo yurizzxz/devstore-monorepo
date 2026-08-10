@@ -40,7 +40,7 @@ export default async function RootLayout({
           />
 
           <div className="md:py-0">{children}</div>
-          <Toaster />
+          <Toaster position="top-center" />
           <Footer />
         </main>
       </body>
