@@ -40,7 +40,7 @@ export const Header = ({ user, categories }: HeaderProps) => {
   const handleSignOut = async () => {
     await authClient.signOut();
     router.refresh();
-  }
+  };
   return (
     <>
       <header className="sticky top-0 w-full z-20 bg-background border-b border-zinc-800">
@@ -108,28 +108,34 @@ export const Header = ({ user, categories }: HeaderProps) => {
                   <span className="hidden md:block text-md">Carrinho</span>
                 </SheetTrigger>
                 <SheetContent>
-                 {user ? (
-                  <CartList />
-                 ) : (
-                  <div className="flex flex-col items-center justify-center h-full">
-                    <span className="text-md">Voce precisa estar logado</span>
-                    <Button
-                      asChild
-                      variant="ghost"
-                      className="md:px-2 md:py-1 mt-3"
-                    >
-                      <Link
-                        href="/authentication"
-                        className="flex flex-row items-center gap-2"
+                  {user ? (
+                    <>
+                      <SheetHeader>
+                        <SheetTitle>Carrinho</SheetTitle>
+                      </SheetHeader>
+
+                      <CartList />
+                    </>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center h-full">
+                      <span className="text-md">Voce precisa estar logado</span>
+                      <Button
+                        asChild
+                        variant="ghost"
+                        className="md:px-2 md:py-1 mt-3"
                       >
-                        <User className="size-7" />
-                        <span className="hidden md:block text-md">
-                          Entrar / Cadastrar
-                        </span>
-                      </Link>
-                    </Button>
-                  </div>
-                 )}
+                        <Link
+                          href="/authentication"
+                          className="flex flex-row items-center gap-2"
+                        >
+                          <User className="size-7" />
+                          <span className="hidden md:block text-md">
+                            Entrar / Cadastrar
+                          </span>
+                        </Link>
+                      </Button>
+                    </div>
+                  )}
                 </SheetContent>
               </Sheet>
 
