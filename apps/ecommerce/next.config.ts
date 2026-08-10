@@ -4,6 +4,7 @@ const nextConfig: NextConfig = {
   /* config options here */
   transpilePackages: [
     "@repo/core",
+    "@repo/auth",
     "@repo/lib",
     "@repo/prisma",
     "@repo/ui",

@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "exports": {
-    ".": "./*.ts"
+    "./*": "./*.ts"
   },
   "dependencies": {
     "@better-auth/prisma-adapter": "^1.6.26",

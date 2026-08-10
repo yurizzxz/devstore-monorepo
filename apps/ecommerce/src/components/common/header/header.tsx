@@ -1,3 +1,5 @@
+"use client";
+
 import CartList from "@/components/ui/cart-list";
 import { Menu, ShoppingCart, User } from "lucide-react";
 import Image from "next/image";
@@ -18,11 +20,12 @@ import {
   SheetTrigger,
 } from "@repo/ui/components/sheet";
 import { Button } from "@repo/ui/components/button";
+import { authClient } from "@repo/auth/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 type HeaderProps = {
   user: {
     name: string;
-    image: string;
     email: string;
   } | null;
   categories: {
@@ -33,6 +36,11 @@ type HeaderProps = {
 };
 
 export const Header = ({ user, categories }: HeaderProps) => {
+  const router = useRouter();
+  const handleSignOut = async () => {
+    await authClient.signOut();
+    router.refresh();
+  }
   return (
     <>
       <header className="sticky top-0 w-full z-20 bg-background border-b border-zinc-800">
@@ -57,8 +65,9 @@ export const Header = ({ user, categories }: HeaderProps) => {
               <div className="hidden md:block">
                 {user ? (
                   <DropdownMenu>
-                    <DropdownMenuTrigger>
+                    <DropdownMenuTrigger className="flex flex-row items-center gap-2 cursor-pointer">
                       <User className="size-7" />
+                      <span>{user.name}</span>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                       <DropdownMenuItem>
@@ -68,14 +77,20 @@ export const Header = ({ user, categories }: HeaderProps) => {
                         <Link href="/orders">Pedidos</Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem>
-                        <Link href="/logout">Sair</Link>
+                        <Button
+                          onClick={handleSignOut}
+                          variant="ghost"
+                          className="w-full px-0 py-0 text-left"
+                        >
+                          Sair
+                        </Button>
                       </DropdownMenuItem>
                     </DropdownMenuContent>
                   </DropdownMenu>
                 ) : (
                   <Button asChild variant="ghost" className="md:px-2 md:py-1">
                     <Link
-                      href="/login"
+                      href="/authentication"
                       className="flex flex-row items-center gap-2"
                     >
                       <User className="size-7" />
@@ -123,7 +138,13 @@ export const Header = ({ user, categories }: HeaderProps) => {
                             <Link href="/orders">Pedidos</Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem>
-                            <Link href="/logout">Sair</Link>
+                            <Button
+                              onClick={handleSignOut}
+                              variant="ghost"
+                              className="w-full p-0 text-left"
+                            >
+                              Sair
+                            </Button>
                           </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
@@ -134,7 +155,7 @@ export const Header = ({ user, categories }: HeaderProps) => {
                         className="md:px-2 md:py-1"
                       >
                         <Link
-                          href="/login"
+                          href="/authentication"
                           className="flex flex-row items-center gap-2"
                         >
                           <User className="size-7" />

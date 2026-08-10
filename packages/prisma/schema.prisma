@@ -8,42 +8,214 @@ generator client {
 }
 
 model User {
-  id                String            @id @default(cuid())
-  name              String
-  email             String            @unique
-  imageUrl          String?
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?  @map("imageUrl")
+  createdAt     DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt     DateTime @updatedAt @db.Timestamptz(3)
+
+  sessions Session[]
+  accounts Account[]
+
   carts             Cart[]
   orders            Order[]
   shippingAddresses ShippingAddress[]
 }
 
-model Product {
-  id              String      @id @default(cuid())
-  name            String
-  description     String
-  slug            String      @unique
-  productImage    String
-  specifications  String
-  categoryId      String
-  category        Category    @relation(fields: [categoryId], references: [id])
-  priceInCents    Int
-  avaliationStars Float
-  createdAt       DateTime    @default(now()) @db.Timestamptz(3)
-  isFeatured      Boolean     @default(false)
-  stockQuantity   Int         @default(0)
-  cartItems       CartItem[]
-  orderItems      OrderItem[]
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([categoryId])
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
 }
 
-model Category {
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model Product {
+  id                String             @id @default(cuid())
+  name              String
+  description       String
+  slug              String             @unique
+  productImage      String
+  specifications    String
+  kind              ProductKind        @default(SINGLE)
+  categoryId        String
+  category          Category           @relation(fields: [categoryId], references: [id])
+  brandId           String?
+  brand             Brand?             @relation(fields: [brandId], references: [id])
+  priceInCents      Int
+  avaliationStars   Float
+  createdAt         DateTime           @default(now()) @db.Timestamptz(3)
+  isFeatured        Boolean            @default(false)
+  stockQuantity     Int                @default(0)
+  cartItems         CartItem[]
+  orderItems        OrderItem[]
+  productAttributes ProductAttribute[]
+  promotions        PromotionProduct[]
+  kitItems          ProductKitItem[]   @relation("ComputerComponents")
+  usedInKits        ProductKitItem[]   @relation("ComponentInComputers")
+
+  @@index([categoryId])
+  @@index([brandId])
+  @@index([categoryId, isFeatured])
+}
+
+enum ProductKind {
+  SINGLE
+  COMPUTER
+}
+
+enum AttributeType {
+  TEXT
+  NUMBER
+  BOOLEAN
+  SELECT
+}
+
+model Attribute {
+  id   String        @id @default(cuid())
+  key  String        @unique
+  name String
+  type AttributeType
+  unit String?
+
+  products   ProductAttribute[]
+  categories CategoryAttribute[]
+}
+
+model CategoryAttribute {
+  categoryId  String
+  attributeId String
+
+  category  Category  @relation(fields: [categoryId], references: [id])
+  attribute Attribute @relation(fields: [attributeId], references: [id])
+
+  @@id([categoryId, attributeId])
+}
+
+model ProductAttribute {
+  id          String @id @default(cuid())
+  productId   String
+  attributeId String
+
+  valueText    String?
+  valueNumber  Float?
+  valueBoolean Boolean?
+
+  product   Product   @relation(fields: [productId], references: [id])
+  attribute Attribute @relation(fields: [attributeId], references: [id])
+
+  @@unique([productId, attributeId])
+  @@index([attributeId, valueText])
+  @@index([attributeId, valueNumber])
+}
+
+model Brand {
   id       String    @id @default(cuid())
-  name     String
+  name     String    @unique
   slug     String    @unique
   products Product[]
 }
 
+model Category {
+  id                 String              @id @default(cuid())
+  name               String
+  slug               String              @unique
+  parentId           String?
+  parent             Category?           @relation("CategoryTree", fields: [parentId], references: [id])
+  children           Category[]          @relation("CategoryTree")
+  products           Product[]
+  categoryAttributes CategoryAttribute[]
+  showOnHomepage     Boolean             @default(false)
+  homeOrder          Int                 @default(0)
+  navigationOrder    Int                 @default(0)
+  showInNavigation   Boolean             @default(false)
+
+  @@index([parentId])
+}
+
+model Promotion {
+  id        String             @id @default(cuid())
+  name      String
+  slug      String             @unique
+  startsAt  DateTime           @db.Timestamptz(3)
+  endsAt    DateTime           @db.Timestamptz(3)
+  isActive  Boolean            @default(true)
+  products  PromotionProduct[]
+  createdAt DateTime           @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime           @updatedAt @db.Timestamptz(3)
+
+  @@index([isActive, startsAt, endsAt])
+}
+
+model ProductKitItem {
+  id          String @id @default(cuid())
+  computerId  String
+  componentId String
+  quantity    Int    @default(1)
+
+  computer  Product @relation("ComputerComponents", fields: [computerId], references: [id])
+  component Product @relation("ComponentInComputers", fields: [componentId], references: [id])
+
+  @@unique([computerId, componentId])
+  @@index([componentId])
+}
+
+model PromotionProduct {
+  id                    String @id @default(cuid())
+  promotionId           String
+  productId             String
+  promotionPriceInCents Int
+
+  promotion Promotion @relation(fields: [promotionId], references: [id])
+  product   Product   @relation(fields: [productId], references: [id])
+
+  @@unique([promotionId, productId])
+  @@index([productId])
+}
+
+// orders
 model Cart {
   id           String     @id @default(cuid())
   userId       String
