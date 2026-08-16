@@ -30,6 +30,17 @@ export default async function RootLayout({
   const session = await auth.api.getSession({
     headers: await headers(),
   });
+  const cart = session
+    ? await prisma.cart.findUnique({
+        where: { userId: session.user.id },
+        include: {
+          items: {
+            include: { product: true },
+          },
+        },
+      })
+    : null;
+  
   return (
     <html lang="pt-BR">
       <body className="text-[#f5eeff]">
@@ -37,6 +48,7 @@ export default async function RootLayout({
           <Header
             user={session?.user ?? null}
             categories={categories}
+            cart={cart}
           />
 
           <div className="md:py-0">{children}</div>

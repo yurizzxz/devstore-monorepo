@@ -1,4 +1,3 @@
-import { Button } from "@repo/ui/components/button";
 import { prisma } from "@repo/prisma/client";
 import { formatCentsToBRL } from "@repo/utils/money";
 import ProductItem from "@/components/common/product-item";
@@ -7,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Badge } from "@repo/ui/components/badge";
+import { AddToCartButton } from "@/components/common/add-to-cart-button";
 
 type ProductPageProps = {
   params: Promise<{
@@ -129,13 +129,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
               : "Produto indisponível"}
           </div>
 
-          <Button
-            type="button"
-            disabled={!isInStock}
-            className="mt-6 h-13 w-full text-base font-bold"
-          >
-            Adicionar ao carrinho
-          </Button>
+          <AddToCartButton disabled={!isInStock} productId={product.id} />
 
           <div className="mt-8 flex gap-3 border-t pt-6 text-sm leading-6 text-zinc-300">
             <Truck className="mt-0.5 size-5 shrink-0 text-purple" />

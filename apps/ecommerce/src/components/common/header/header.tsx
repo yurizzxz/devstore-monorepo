@@ -1,6 +1,6 @@
 "use client";
 
-import CartList from "@/components/ui/cart-list";
+import CartList, { type CartView } from "@/components/ui/cart-list";
 import { Menu, ShoppingCart, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -33,9 +33,10 @@ type HeaderProps = {
     slug: string;
     name: string;
   }[];
+  cart: CartView | null;
 };
 
-export const Header = ({ user, categories }: HeaderProps) => {
+export const Header = ({ user, categories, cart }: HeaderProps) => {
   const router = useRouter();
   const handleSignOut = async () => {
     await authClient.signOut();
@@ -114,7 +115,7 @@ export const Header = ({ user, categories }: HeaderProps) => {
                         <SheetTitle>Carrinho</SheetTitle>
                       </SheetHeader>
 
-                      <CartList />
+                      <CartList cart={cart} />
                     </>
                   ) : (
                     <div className="flex flex-col items-center justify-center h-full">
