@@ -5,5 +5,9 @@
   "type": "module",
   "exports": {
     ".": "./*.ts"
+  },
+  "dependencies": {
+    "@repo/prisma": "workspace:*",
+    "@repo/core": "workspace:*"
   }
 }
