@@ -67,6 +67,7 @@ modules/products/
 - Filtros e paginação: URL search params.
 - Componentes genéricos: `packages/ui`.
 - Componentes de domínio: app ou módulo dono da feature.
+- Utilize ReactHookForm e Zod para validações.
 
 ## Qualidade
 

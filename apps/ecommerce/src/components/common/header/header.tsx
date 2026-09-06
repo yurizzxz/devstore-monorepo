@@ -78,6 +78,9 @@ export const Header = ({ user, categories, cart }: HeaderProps) => {
                         <Link href="/orders">Pedidos</Link>
                       </DropdownMenuItem>
                       <DropdownMenuItem>
+                        <Link href="/addresses">Endereços</Link>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem>
                         <Button
                           onClick={handleSignOut}
                           variant="destructive"
@@ -160,6 +163,9 @@ export const Header = ({ user, categories, cart }: HeaderProps) => {
                           </DropdownMenuItem>
                           <DropdownMenuItem>
                             <Link href="/orders">Pedidos</Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem>
+                            <Link href="/addresses">Endereços</Link>
                           </DropdownMenuItem>
                           <DropdownMenuItem>
                             <Button
