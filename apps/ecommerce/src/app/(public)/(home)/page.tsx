@@ -1,13 +1,9 @@
 import ProductItem from "@/components/common/product-item";
 import Banner from "@/components/ui/banner";
-import { prisma } from "@repo/prisma/client";
+import { getFeaturedProducts } from "@/data/get-products";
 
 export default async function  Home() {
-  const featuredProducts = await prisma.product.findMany({
-    where: {
-      isFeatured: true,
-    },
-  });
+  const featuredProducts = await getFeaturedProducts();
   return (
     <section className="pt-0 pb-15 space-y-6 sm:space-y-10 md:space-y-12 lg:space-y-16">
       <Banner urlImage="/banner1.png" altImage="Banner Promoções" />

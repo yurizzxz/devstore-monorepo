@@ -1,9 +1,9 @@
-import { prisma } from "@repo/prisma/client";
 import ProductItem from "@/components/common/product-item";
 import { ProductFilters } from "@/components/common/product-filters";
+import { getProducts } from "@/data/get-products";
 
 export default async function ProductCategories() {
-  const products = await prisma.product.findMany();
+  const products = await getProducts();
 
   return (
     <section className="max-w-360 mx-auto mt-4 space-y-8 px-3 py-4">

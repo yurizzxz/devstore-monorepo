@@ -3,7 +3,7 @@
 import { authenticatedAction } from "@/actions/authenticated-action";
 import { CreateOrder } from "@repo/core/modules/orders/use-cases/create-order";
 import { PrismaOrderRepository } from "@repo/db/repositories/prisma-order-repository";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { z } from "zod";
 
 import { getCreateOrderErrorMessage } from "./errors";
@@ -23,6 +23,7 @@ export const createOrder = authenticatedAction
         shippingAddressId: parsedInput.shippingAddressId,
       });
 
+      revalidateTag("products");
       revalidatePath("/", "layout");
       return { success: true, orderId: order.id };
     } catch (error) {

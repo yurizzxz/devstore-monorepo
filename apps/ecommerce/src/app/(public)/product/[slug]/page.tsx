@@ -1,6 +1,6 @@
-import { prisma } from "@repo/prisma/client";
 import { formatCentsToBRL } from "@repo/utils/money";
 import ProductItem from "@/components/common/product-item";
+import { getProductBySlug } from "@/data/get-products";
 import { Check, ShieldCheck, Star, Truck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -17,28 +17,7 @@ type ProductPageProps = {
 export default async function ProductPage({ params }: ProductPageProps) {
   const { slug } = await params;
 
-  const product = await prisma.product.findUnique({
-    where: { slug },
-    include: {
-      category: {
-        include: {
-          products: {
-            where: { slug: { not: slug } },
-            orderBy: [{ isFeatured: "desc" }, { createdAt: "desc" }],
-            take: 6,
-            select: {
-              id: true,
-              name: true,
-              description: true,
-              slug: true,
-              productImage: true,
-              priceInCents: true,
-            },
-          },
-        },
-      },
-    },
-  });
+  const product = await getProductBySlug(slug);
 
   if (!product) {
     notFound();

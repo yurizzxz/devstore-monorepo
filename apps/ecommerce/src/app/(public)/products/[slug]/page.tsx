@@ -2,6 +2,7 @@ import { prisma } from "@repo/prisma/client";
 import { notFound } from "next/navigation";
 import ProductItem from "@/components/common/product-item";
 import { ProductFilters } from "@/components/common/product-filters";
+import { getProductsByCategorySlug } from "@/data/get-products";
 
 type ProductsByCategoryPageProps = {
   params: Promise<{
@@ -24,13 +25,7 @@ export default async function AllProducts({
         slug: slug,
       },
     }),
-    prisma.product.findMany({
-      where: {
-        category: {
-          slug: slug,
-        },
-      },
-    }),
+    getProductsByCategorySlug(slug),
   ]);
 
   if (!category) {
