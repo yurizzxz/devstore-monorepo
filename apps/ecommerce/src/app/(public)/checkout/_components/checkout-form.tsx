@@ -1,6 +1,6 @@
 "use client";
 
-import { createOrder } from "@/actions/order/create-order";
+import { createCheckout } from "@/actions/checkout/create-checkout";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@repo/ui/components/button";
 import {
@@ -12,7 +12,6 @@ import {
 } from "@repo/ui/components/form";
 import { Check, MapPin, Plus } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -41,7 +40,6 @@ const checkoutFormSchema = z.object({
 type CheckoutFormValues = z.infer<typeof checkoutFormSchema>;
 
 export function CheckoutForm({ addresses, disabled }: CheckoutFormProps) {
-  const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const form = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutFormSchema),
@@ -50,24 +48,24 @@ export function CheckoutForm({ addresses, disabled }: CheckoutFormProps) {
     },
   });
 
-  function handleCreateOrder(values: CheckoutFormValues) {
+  function handleCheckout(values: CheckoutFormValues) {
     startTransition(async () => {
-      const result = await createOrder(values);
+      const result = await createCheckout(values);
 
-      if (!result.data?.success) {
-        toast.error(result.serverError ?? "Não foi possível criar o pedido.");
+      if (!result.data?.checkoutUrl) {
+        toast.error(
+          result.serverError ?? "Não foi possível iniciar o pagamento.",
+        );
         return;
       }
 
-      toast.success("Pedido criado com sucesso.");
-      router.push("/orders");
-      router.refresh();
+      window.location.assign(result.data.checkoutUrl);
     });
   }
 
   return (
     <Form {...form}>
-      <form className="mt-10" onSubmit={form.handleSubmit(handleCreateOrder)}>
+      <form className="mt-10" onSubmit={form.handleSubmit(handleCheckout)}>
         <section>
           <div className="flex items-center justify-between gap-4">
             <h2 className="text-lg font-semibold">Endereço de entrega</h2>
@@ -80,7 +78,9 @@ export function CheckoutForm({ addresses, disabled }: CheckoutFormProps) {
 
           {addresses.length === 0 ? (
             <div className="mt-4 border border-zinc-800 p-6">
-              <p className="font-medium">Cadastre um endereço para continuar.</p>
+              <p className="font-medium">
+                Cadastre um endereço para continuar.
+              </p>
               <p className="mt-2 text-sm text-zinc-400">
                 O endereço será copiado para o pedido e preservado no histórico.
               </p>
@@ -121,7 +121,9 @@ export function CheckoutForm({ addresses, disabled }: CheckoutFormProps) {
                             <div className="flex gap-3">
                               <MapPin className="mt-0.5 size-5 shrink-0 text-primary" />
                               <div>
-                                <p className="font-semibold">{address.recipientName}</p>
+                                <p className="font-semibold">
+                                  {address.recipientName}
+                                </p>
                                 <p className="mt-2 text-sm leading-6 text-zinc-400">
                                   {address.street}, {address.number}
                                   {address.complement
@@ -156,7 +158,7 @@ export function CheckoutForm({ addresses, disabled }: CheckoutFormProps) {
             size="lg"
             type="submit"
           >
-            {isPending ? "Criando pedido..." : "Confirmar pedido"}
+            {isPending ? "Abrindo pagamento..." : "Ir para pagamento"}
           </Button>
         </section>
       </form>

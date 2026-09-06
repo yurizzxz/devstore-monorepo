@@ -17,11 +17,11 @@ const updateAddressSchema = z
     complement: z.string().nullable().optional(),
     city: z.string().min(2).optional(),
     neighborhood: z.string().min(2).optional(),
-    zipCode: z.string().min(8).optional(),
+    zipCode: z.string().regex(/^\d{8}$/).optional(),
     country: z.string().min(2).optional(),
     phone: z.string().min(10).optional(),
     email: z.email().optional(),
-    cpfOrCnpj: z.string().min(11).optional(),
+    cpfOrCnpj: z.string().regex(/^(\d{11}|\d{14})$/).optional(),
   })
   .refine(({ id: _id, ...data }) => Object.keys(data).length > 0, {
     message: "Informe ao menos um campo para atualizar.",

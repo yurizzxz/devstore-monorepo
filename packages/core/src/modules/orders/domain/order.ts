@@ -1,4 +1,4 @@
-export const ORDER_EXPIRATION_IN_MINUTES = 30
+export const ORDER_EXPIRATION_IN_MINUTES = 35
 
 export type OrderStatus =
   | "PENDING_PAYMENT"
@@ -10,9 +10,18 @@ export type Order = {
   userId: string
   shippingAddressId: string
   status: OrderStatus
+  email: string
   totalPriceInCents: number
   expiresAt: Date
   createdAt: Date
+  items: OrderItem[]
+}
+
+export type OrderItem = {
+  productId: string
+  productName: string
+  quantity: number
+  priceInCents: number
 }
 
 export type OrderPricedItem = {

@@ -9,8 +9,10 @@ import {
   OrderShippingAddressNotFoundError,
 } from "@repo/core/modules/orders/domain/order"
 import type {
+  ConfirmOrderPaymentInput,
   CreateOrderFromCartInput,
   OrderRepository,
+  SetCheckoutSessionInput,
 } from "@repo/core/modules/orders/repositories/order-repository"
 import { prisma } from "@repo/prisma/client"
 
@@ -19,9 +21,18 @@ const orderSelect = {
   userId: true,
   shippingAddressId: true,
   status: true,
+  email: true,
   totalPriceInCents: true,
   expiresAt: true,
   createdAt: true,
+  items: {
+    select: {
+      productId: true,
+      quantity: true,
+      priceInCents: true,
+      product: { select: { name: true } },
+    },
+  },
 }
 
 export class PrismaOrderRepository implements OrderRepository {
@@ -142,20 +153,58 @@ export class PrismaOrderRepository implements OrderRepository {
         data: { totalInCents: 0 },
       })
 
-      return order
+      return {
+        ...order,
+        items: order.items.map((item) => ({
+          productId: item.productId,
+          productName: item.product.name,
+          quantity: item.quantity,
+          priceInCents: item.priceInCents,
+        })),
+      }
     })
   }
 
-  async confirmPayment(orderId: string): Promise<boolean> {
+  async setCheckoutSessionId(
+    input: SetCheckoutSessionInput,
+  ): Promise<boolean> {
     const result = await prisma.order.updateMany({
       where: {
-        id: orderId,
+        id: input.orderId,
         status: "PENDING_PAYMENT",
+        stripeCheckoutSessionId: null,
       },
-      data: { status: "SUCCESS_PAYMENT" },
+      data: { stripeCheckoutSessionId: input.checkoutSessionId },
     })
 
     return result.count > 0
+  }
+
+  async confirmPayment(input: ConfirmOrderPaymentInput): Promise<boolean> {
+    const result = await prisma.order.updateMany({
+      where: {
+        id: input.orderId,
+        stripeCheckoutSessionId: input.checkoutSessionId,
+        status: "PENDING_PAYMENT",
+      },
+      data: {
+        status: "SUCCESS_PAYMENT",
+        stripePaymentIntentId: input.paymentIntentId,
+      },
+    })
+
+    if (result.count > 0) return true
+
+    const confirmedOrder = await prisma.order.findFirst({
+      where: {
+        id: input.orderId,
+        stripeCheckoutSessionId: input.checkoutSessionId,
+        status: "SUCCESS_PAYMENT",
+      },
+      select: { id: true },
+    })
+
+    return confirmedOrder !== null
   }
 
   cancel(orderId: string): Promise<boolean> {
@@ -163,6 +212,7 @@ export class PrismaOrderRepository implements OrderRepository {
       const order = await transaction.order.findUnique({
         where: { id: orderId },
         select: {
+          status: true,
           items: {
             select: {
               productId: true,
@@ -173,6 +223,8 @@ export class PrismaOrderRepository implements OrderRepository {
       })
 
       if (!order) return false
+      if (order.status === "CANCELLED") return true
+      if (order.status === "SUCCESS_PAYMENT") return false
 
       const statusUpdate = await transaction.order.updateMany({
         where: {

@@ -178,7 +178,12 @@ export default function CartList({ cart }: CartListProps) {
           <span>Subtotal</span>
           <span>{formatCentsToBRL(cart?.totalInCents ?? 0)}</span>
         </div>
-        <Button className="w-full" disabled={items.length === 0} type="button">
+        <Button
+          className="w-full"
+          disabled={items.length === 0}
+          onClick={() => router.push("/checkout")}
+          type="button"
+        >
           Finalizar compra
         </Button>
       </div>

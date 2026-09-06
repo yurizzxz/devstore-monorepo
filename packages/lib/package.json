@@ -4,6 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "exports": {
-    ".": "./index.ts"
+    "./stripe/client": "./src/stripe/client.ts"
+  },
+  "dependencies": {
+    "stripe": "^22.6.1"
   }
 }

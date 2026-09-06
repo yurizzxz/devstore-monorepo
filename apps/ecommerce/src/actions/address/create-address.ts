@@ -15,11 +15,11 @@ const createAddressSchema = z.object({
   complement: z.string().optional(),
   city: z.string().min(2),
   neighborhood: z.string().min(2),
-  zipCode: z.string().min(8),
+  zipCode: z.string().regex(/^\d{8}$/),
   country: z.string().default("Brasil"),
   phone: z.string().min(10),
   email: z.email(),
-  cpfOrCnpj: z.string().min(11),
+  cpfOrCnpj: z.string().regex(/^(\d{11}|\d{14})$/),
 });
 
 export const createAddress = authenticatedAction

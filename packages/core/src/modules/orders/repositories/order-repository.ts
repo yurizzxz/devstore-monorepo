@@ -6,8 +6,18 @@ export type CreateOrderFromCartInput = {
   now: Date
 }
 
+export type SetCheckoutSessionInput = {
+  orderId: string
+  checkoutSessionId: string
+}
+
+export type ConfirmOrderPaymentInput = SetCheckoutSessionInput & {
+  paymentIntentId?: string
+}
+
 export interface OrderRepository {
   createFromCart(input: CreateOrderFromCartInput): Promise<Order>
-  confirmPayment(orderId: string): Promise<boolean>
+  setCheckoutSessionId(input: SetCheckoutSessionInput): Promise<boolean>
+  confirmPayment(input: ConfirmOrderPaymentInput): Promise<boolean>
   cancel(orderId: string): Promise<boolean>
 }

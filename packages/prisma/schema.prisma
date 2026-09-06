@@ -234,7 +234,7 @@ model CartItem {
   product   Product  @relation(fields: [productId], references: [id])
   quantity  Int
   createdAt DateTime @default(now()) @db.Timestamptz(3)
-  
+
   @@unique([cartId, productId])
 }
 
@@ -279,6 +279,9 @@ model Order {
   totalPriceInCents Int
   expiresAt         DateTime        @db.Timestamptz(3)
   createdAt         DateTime        @default(now()) @db.Timestamptz(3)
+
+  stripeCheckoutSessionId String? @unique
+  stripePaymentIntentId   String? @unique
 }
 
 model OrderItem {

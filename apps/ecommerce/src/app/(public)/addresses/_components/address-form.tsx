@@ -29,11 +29,14 @@ const addressFormSchema = z.object({
   complement: z.string().trim().optional(),
   city: z.string().trim().min(2, "Informe a cidade."),
   neighborhood: z.string().trim().min(2, "Informe o bairro."),
-  zipCode: z.string().trim().min(8, "Informe um CEP válido."),
+  zipCode: z.string().trim().regex(/^\d{8}$/, "Informe um CEP com 8 números."),
   country: z.string().trim().min(2, "Informe o país."),
   phone: z.string().trim().min(10, "Informe um telefone válido."),
   email: z.email("Informe um e-mail válido."),
-  cpfOrCnpj: z.string().trim().min(11, "Informe um CPF ou CNPJ válido."),
+  cpfOrCnpj: z
+    .string()
+    .trim()
+    .regex(/^(\d{11}|\d{14})$/, "Informe um CPF ou CNPJ somente com números."),
 });
 
 export type AddressFormValues = z.infer<typeof addressFormSchema>;
@@ -54,6 +57,8 @@ type AddressField = {
   label: string;
   type?: HTMLInputTypeAttribute;
   autoComplete?: string;
+  maxLength?: number;
+  numericOnly?: boolean;
 };
 
 const fields: AddressField[] = [
@@ -64,8 +69,19 @@ const fields: AddressField[] = [
   },
   { name: "email", label: "E-mail", type: "email", autoComplete: "email" },
   { name: "phone", label: "Telefone", autoComplete: "tel" },
-  { name: "cpfOrCnpj", label: "CPF ou CNPJ" },
-  { name: "zipCode", label: "CEP", autoComplete: "postal-code" },
+  {
+    name: "cpfOrCnpj",
+    label: "CPF ou CNPJ",
+    maxLength: 14,
+    numericOnly: true,
+  },
+  {
+    name: "zipCode",
+    label: "CEP",
+    autoComplete: "postal-code",
+    maxLength: 8,
+    numericOnly: true,
+  },
   { name: "street", label: "Rua", autoComplete: "address-line1" },
   { name: "number", label: "Número" },
   {
@@ -140,10 +156,20 @@ export function AddressForm({
                     <FormLabel>{fieldConfig.label}</FormLabel>
                     <FormControl>
                       <Input
-                        autoComplete={fieldConfig.autoComplete}
-                        disabled={isPending}
-                        type={fieldConfig.type ?? "text"}
                         {...field}
+                        autoComplete={fieldConfig.autoComplete}
+                        inputMode={fieldConfig.numericOnly ? "numeric" : undefined}
+                        disabled={isPending}
+                        maxLength={fieldConfig.maxLength}
+                        onChange={(event) => {
+                          const value = fieldConfig.numericOnly
+                            ? event.target.value.replace(/\D/g, "")
+                            : event.target.value;
+
+                          field.onChange(value);
+                        }}
+                        type={fieldConfig.type ?? "text"}
+                        className="w-full"
                       />
                     </FormControl>
                     <FormMessage />
