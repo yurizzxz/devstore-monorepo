@@ -14,23 +14,28 @@ export default async function AllProducts({
 }: ProductsByCategoryPageProps) {
   const { slug } = await params;
 
-  const category = await prisma.category.findUnique({
-    where: {
-      slug: slug,
-    },
-  });
+  if (!slug) {
+    return notFound();
+  }
+
+  const [category, products] = await Promise.all([
+    prisma.category.findUnique({
+      where: {
+        slug: slug,
+      },
+    }),
+    prisma.product.findMany({
+      where: {
+        category: {
+          slug: slug,
+        },
+      },
+    }),
+  ]);
 
   if (!category) {
     return notFound();
   }
-
-  const products = await prisma.product.findMany({
-    where: {
-      category: {
-        slug: slug,
-      },
-    },
-  });
 
   return (
     <section className="max-w-360 mx-auto mt-4 space-y-8 px-3 py-4">

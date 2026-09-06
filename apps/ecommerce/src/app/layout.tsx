@@ -2,10 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Header } from "@/components/common/header/header";
 import { Footer } from "@/components/common/footer";
-import { auth } from "@repo/auth/lib/auth";
-import { prisma } from "@repo/prisma/client";
-import { headers } from "next/headers";
 import { Toaster } from "sonner";
+import { getCategories } from "@/data/get-categories";
 
 export const metadata: Metadata = {
   title: {
@@ -22,34 +20,13 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const categories = await prisma.category.findMany({
-    orderBy: {
-      name: "asc",
-    },
-  });
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-  const cart = session
-    ? await prisma.cart.findUnique({
-        where: { userId: session.user.id },
-        include: {
-          items: {
-            include: { product: true },
-          },
-        },
-      })
-    : null;
-  
+  const categories = await getCategories();
+
   return (
     <html lang="pt-BR">
       <body className="text-[#f5eeff]">
         <main>
-          <Header
-            user={session?.user ?? null}
-            categories={categories}
-            cart={cart}
-          />
+          <Header categories={categories} />
 
           <div className="md:py-0">{children}</div>
           <Toaster position="top-center" />

@@ -17,14 +17,15 @@ const ProductItem = ({ product, textContainerClassName }: ProductItemProps) => {
   return (
     <Card className="pt-0">
       <Link href={`/product/${product.slug}`} className="flex flex-col gap-4">
-        <Image
-          src={product.productImage}
-          alt={product.name}
-          sizes="100vw"
-          width={0}
-          height={0}
-          className="h-auto w-full rounded-xl"
-        />
+        <div className="relative aspect-square w-full overflow-hidden rounded-xl">
+          <Image
+            src={product.productImage}
+            alt={product.name}
+            fill
+            sizes="(max-width: 767px) 50vw, (max-width: 1279px) 25vw, 16vw"
+            className="object-contain"
+          />
+        </div>
         <div
           className={cn(
             "flex max-w-[200px] flex-col gap-1 px-3",

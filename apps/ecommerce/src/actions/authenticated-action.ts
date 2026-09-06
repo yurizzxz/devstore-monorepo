@@ -1,15 +1,9 @@
 import { actionClient } from "@/lib/safe-action";
-import { auth } from "@repo/auth/lib/auth";
+import { requireSession } from "@repo/auth/lib/require-session";
 import { headers } from "next/headers";
-
+  
 export const authenticatedAction = actionClient.use(async ({ next }) => {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
-
-  if (!session) {
-    throw new Error("Faça login para continuar.");
-  }
+  const session = await requireSession(await headers())
 
   return next({
     ctx: {

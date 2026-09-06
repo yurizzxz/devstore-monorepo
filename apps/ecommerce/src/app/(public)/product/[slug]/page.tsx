@@ -19,22 +19,32 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   const product = await prisma.product.findUnique({
     where: { slug },
-    include: { category: true },
+    include: {
+      category: {
+        include: {
+          products: {
+            where: { slug: { not: slug } },
+            orderBy: [{ isFeatured: "desc" }, { createdAt: "desc" }],
+            take: 6,
+            select: {
+              id: true,
+              name: true,
+              description: true,
+              slug: true,
+              productImage: true,
+              priceInCents: true,
+            },
+          },
+        },
+      },
+    },
   });
 
   if (!product) {
     notFound();
   }
 
-  const relatedProducts = await prisma.product.findMany({
-    where: {
-      categoryId: product.categoryId,
-      id: { not: product.id },
-    },
-    orderBy: [{ isFeatured: "desc" }, { createdAt: "desc" }],
-    take: 6,
-  });
-
+  const relatedProducts = product.category.products;
   const isInStock = product.stockQuantity > 0;
   const installmentInCents = Math.ceil(product.priceInCents / 10);
 
