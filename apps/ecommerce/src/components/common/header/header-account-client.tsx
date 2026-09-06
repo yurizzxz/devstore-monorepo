@@ -19,6 +19,7 @@ import {
 import { Menu, ShoppingCart, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import type { HeaderCategory } from "./header";
 
@@ -83,8 +84,17 @@ export function HeaderAccountClient({
   const router = useRouter();
 
   async function handleSignOut() {
-    await authClient.signOut();
-    router.refresh();
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          toast.success("Sessão encerrada com sucesso");
+          router.refresh();
+        },
+        onError: (ctx) => {
+          toast.error(ctx.error.message ?? "Não foi possível sair da conta");
+        },
+      },
+    });
   }
 
   return (

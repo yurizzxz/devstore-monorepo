@@ -11,7 +11,8 @@ import { Minus, Plus, Trash2 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useState, useTransition } from "react"
+import { useTransition } from "react"
+import { toast } from "sonner"
 
 export type CartView = {
   id: string
@@ -37,7 +38,6 @@ type CartListProps = {
 export default function CartList({ cart }: CartListProps) {
   const router = useRouter()
   const [isPending, startTransition] = useTransition()
-  const [message, setMessage] = useState("")
   const items = cart?.items ?? []
 
   function runCartAction(
@@ -45,17 +45,19 @@ export default function CartList({ cart }: CartListProps) {
       data?: { success: boolean }
       serverError?: string
     }>,
+    successMessage: string,
   ) {
-    setMessage("")
-
     startTransition(async () => {
       const result = await action()
 
       if (!result.data?.success) {
-        setMessage(result.serverError ?? "Não foi possível atualizar o carrinho.")
+        toast.error(
+          result.serverError ?? "Não foi possível atualizar o carrinho.",
+        )
         return
       }
 
+      toast.success(successMessage)
       router.refresh()
     })
   }
@@ -104,6 +106,7 @@ export default function CartList({ cart }: CartListProps) {
                           if (item.quantity === 1) {
                             runCartAction(() =>
                               removeProductFromCart({ productId: item.productId }),
+                              "Produto removido do carrinho.",
                             )
                             return
                           }
@@ -113,6 +116,7 @@ export default function CartList({ cart }: CartListProps) {
                               productId: item.productId,
                               quantity: item.quantity - 1,
                             }),
+                            "Quantidade atualizada.",
                           )
                         }}
                         size="icon-xs"
@@ -133,6 +137,7 @@ export default function CartList({ cart }: CartListProps) {
                               productId: item.productId,
                               quantity: item.quantity + 1,
                             }),
+                            "Quantidade atualizada.",
                           )
                         }
                         size="icon-xs"
@@ -149,6 +154,7 @@ export default function CartList({ cart }: CartListProps) {
                       onClick={() =>
                         runCartAction(() =>
                           removeProductFromCart({ productId: item.productId }),
+                          "Produto removido do carrinho.",
                         )
                       }
                       size="icon-xs"
@@ -168,7 +174,6 @@ export default function CartList({ cart }: CartListProps) {
       <Separator />
 
       <div className="space-y-4 px-5 py-4">
-        {message && <p className="text-sm text-red-300">{message}</p>}
         <div className="flex items-center justify-between text-base font-semibold">
           <span>Subtotal</span>
           <span>{formatCentsToBRL(cart?.totalInCents ?? 0)}</span>

@@ -1,4 +1,5 @@
 import { auth } from "./auth"
+import { UnauthorizedError } from "./errors"
 
 export async function requireSession(requestHeaders: Headers) {
   const session = await auth.api.getSession({
@@ -6,7 +7,7 @@ export async function requireSession(requestHeaders: Headers) {
   })
 
   if (!session) {
-    throw new Error("UNAUTHORIZED")
+    throw new UnauthorizedError()
   }
 
   return session

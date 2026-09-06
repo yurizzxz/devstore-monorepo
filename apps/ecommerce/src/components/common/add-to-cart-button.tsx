@@ -3,7 +3,8 @@
 import { addProductToCart } from "@/actions/cart";
 import { Button } from "@repo/ui/components/button";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useTransition } from "react";
+import { toast } from "sonner";
 
 type AddToCartButtonProps = {
   productId: string;
@@ -16,20 +17,18 @@ export function AddToCartButton({
 }: AddToCartButtonProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
-  const [message, setMessage] = useState("");
-
   function handleAddToCart() {
-    setMessage("");
-
     startTransition(async () => {
       const result = await addProductToCart({ productId });
 
       if (!result.data?.success) {
-        setMessage(result.serverError ?? "Não foi possível atualizar o carrinho.");
+        toast.error(
+          result.serverError ?? "Não foi possível atualizar o carrinho.",
+        );
         return;
       }
 
-      setMessage("Produto adicionado ao carrinho.");
+      toast.success("Produto adicionado ao carrinho.");
       router.refresh();
     });
   }
@@ -44,11 +43,6 @@ export function AddToCartButton({
       >
         {isPending ? "Adicionando..." : "Adicionar ao carrinho"}
       </Button>
-      {message && (
-        <p className="text-center text-sm text-zinc-300" role="status">
-          {message}
-        </p>
-      )}
     </div>
   );
 }
