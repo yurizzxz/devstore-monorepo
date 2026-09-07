@@ -10,7 +10,7 @@ import {
 import { Input } from "@repo/ui/components/input";
 import type { Address } from "@repo/core/modules/addresses/domain/address";
 import { X } from "lucide-react";
-import { HTMLInputTypeAttribute } from "react";
+import { ChangeEvent, HTMLInputTypeAttribute } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { Form } from "@repo/ui/components/form";
@@ -161,7 +161,7 @@ export function AddressForm({
                         inputMode={fieldConfig.numericOnly ? "numeric" : undefined}
                         disabled={isPending}
                         maxLength={fieldConfig.maxLength}
-                        onChange={(event) => {
+                        onChange={(event: ChangeEvent<HTMLInputElement>) => {
                           const value = fieldConfig.numericOnly
                             ? event.target.value.replace(/\D/g, "")
                             : event.target.value;
