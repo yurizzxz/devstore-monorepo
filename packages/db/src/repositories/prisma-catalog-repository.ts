@@ -29,10 +29,115 @@ export type CatalogFilterData = {
 };
 
 export class PrismaCatalogRepository {
+  async searchProducts(query: string, limit = 5) {
+    const normalizedQuery = query.trim();
+    const safeLimit = Math.min(Math.max(limit, 1), 10);
+
+    if (!normalizedQuery) return [];
+
+    return prisma.product.findMany({
+      where: {
+        OR: [
+          {
+            name: {
+              contains: normalizedQuery,
+              mode: "insensitive",
+            },
+          },
+          {
+            brand: {
+              is: {
+                name: {
+                  contains: normalizedQuery,
+                  mode: "insensitive",
+                },
+              },
+            },
+          },
+          {
+            category: {
+              is: {
+                name: {
+                  contains: normalizedQuery,
+                  mode: "insensitive",
+                },
+              },
+            },
+          },
+        ],
+      },
+      orderBy: [{ isFeatured: "desc" }, { name: "asc" }],
+      take: safeLimit,
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        productImage: true,
+        priceInCents: true,
+        stockQuantity: true,
+      },
+    });
+  }
+
   async findCategoryBySlug(slug: string) {
     return prisma.category.findUnique({
       where: { slug },
       select: { id: true, name: true, slug: true },
+    });
+  }
+
+  async searchProducts(query: string, limit: number) {
+    return prisma.product.findMany({
+      where: {
+        stockQuantity: {
+          gt: 0,
+        },
+        OR: [
+          {
+            name: {
+              contains: query,
+              mode: "insensitive",
+            },
+          },
+          {
+            brand: {
+              is: {
+                name: {
+                  contains: query,
+                  mode: "insensitive",
+                },
+              },
+            },
+          },
+          {
+            category: {
+              is: {
+                name: {
+                  contains: query,
+                  mode: "insensitive",
+                },
+              },
+            },
+          },
+        ],
+      },
+      orderBy: [
+        {
+          isFeatured: "desc",
+        },
+        {
+          name: "asc",
+        },
+      ],
+      take: limit,
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        productImage: true,
+        priceInCents: true,
+        stockQuantity: true,
+      },
     });
   }
 

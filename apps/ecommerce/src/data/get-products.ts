@@ -16,7 +16,18 @@ export const getFeaturedProducts = unstable_cache(
 );
 
 export const getProducts = unstable_cache(
-  () => prisma.product.findMany(),
+  (query: string | undefined) =>
+    prisma.product.findMany({
+      where: query
+        ? {
+            OR: [
+              { name: { contains: query, mode: "insensitive" } },
+              { description: { contains: query, mode: "insensitive" } },
+            ],
+          }
+        : undefined,
+      orderBy: [{ isFeatured: "desc" }],
+    }),
   ["products"],
   {
     revalidate: PRODUCT_CACHE_REVALIDATE_SECONDS,

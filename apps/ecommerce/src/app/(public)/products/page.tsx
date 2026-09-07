@@ -2,8 +2,18 @@ import ProductItem from "@/components/common/product-item";
 import { ProductFilters } from "@/components/common/product-filters";
 import { getProducts } from "@/data/get-products";
 
-export default async function ProductCategories() {
-  const products = await getProducts();
+type ProdutcsPageProps = {
+  searchParams: Promise<{
+    q?: string;
+  }>;
+};
+
+export default async function ProductCategories({
+  searchParams,
+}: ProdutcsPageProps) {
+  const { q } = await searchParams;
+  const query = q?.slice(0, 80) || undefined;
+  const products = await getProducts(query || undefined);
 
   return (
     <section className="max-w-360 mx-auto mt-4 space-y-8 px-3 py-4">

@@ -1,4 +1,4 @@
-import SearchBar from "@/components/common/searchbar";
+import SearchBar from "@/components/common/search-bar/search-bar";
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
