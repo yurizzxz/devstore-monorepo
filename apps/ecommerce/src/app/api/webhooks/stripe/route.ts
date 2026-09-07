@@ -41,8 +41,7 @@ async function processStripeEvent(event: Stripe.Event) {
   const repository = new PrismaOrderRepository();
 
   switch (event.type) {
-    case "checkout.session.completed":
-    case "checkout.session.async_payment_succeeded": {
+    case "checkout.session.completed": {
       const session = event.data.object;
 
       if (session.payment_status !== "paid") return;
@@ -58,8 +57,7 @@ async function processStripeEvent(event: Stripe.Event) {
       return;
     }
 
-    case "checkout.session.expired":
-    case "checkout.session.async_payment_failed": {
+    case "checkout.session.expired": {
       const session = event.data.object;
 
       await new CancelOrder(repository).execute(getOrderId(session));

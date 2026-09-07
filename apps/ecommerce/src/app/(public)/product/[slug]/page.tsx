@@ -25,7 +25,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   const relatedProducts = product.category.products;
   const isInStock = product.stockQuantity > 0;
-  const installmentInCents = Math.ceil(product.priceInCents / 10);
 
   return (
     <main className="mx-auto w-full max-w-360 px-4 py-10 md:px-8">
@@ -98,12 +97,12 @@ export default async function ProductPage({ params }: ProductPageProps) {
           </p>
 
           <div className="mt-8 border-y py-6">
-            <p className="text-sm text-zinc-300">À vista no Pix</p>
+            <p className="text-sm text-zinc-300">Preço</p>
             <p className="mt-1 text-4xl font-bold tracking-[-0.03em] text-primary md:text-5xl">
               {formatCentsToBRL(product.priceInCents)}
             </p>
             <p className="mt-2 text-sm text-gray-200">
-              Ou 10x de {formatCentsToBRL(installmentInCents)} sem juros
+              Pagamento integral com cartão de crédito no checkout.
             </p>
           </div>
 

@@ -37,6 +37,13 @@ export const createCheckout = authenticatedAction
         {
           mode: "payment",
           payment_method_types: ["card"],
+          payment_method_options: {
+            card: {
+              installments: {
+                enabled: false,
+              },
+            },
+          },
           customer_email: order.email,
           line_items: order.items.map((item) => ({
             quantity: item.quantity,
@@ -77,11 +84,15 @@ export const createCheckout = authenticatedAction
       return { checkoutUrl: session.url };
     } catch (error) {
       if (checkoutSessionId) {
-        await stripe.checkout.sessions.expire(checkoutSessionId).catch(() => undefined);
+        await stripe.checkout.sessions
+          .expire(checkoutSessionId)
+          .catch(() => undefined);
       }
 
       if (orderId) {
-        await new CancelOrder(repository).execute(orderId).catch(() => undefined);
+        await new CancelOrder(repository)
+          .execute(orderId)
+          .catch(() => undefined);
         revalidateTag("products");
       }
 
